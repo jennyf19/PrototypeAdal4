@@ -16,13 +16,27 @@ namespace PrototypeAdal4.Controllers
 
         public ProductsController(PrototypeAdal4Context context)
         {
-            _context = context;    
+            _context = context;
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.Products.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+           
+            var products = from p in _context.Products
+                select p;
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.ProductName);
+                    break;
+                default:
+                    products = products.OrderBy(p => p.ProductName);
+                    break;
+
+            }
+            return View(await products.AsNoTracking().ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -36,7 +50,7 @@ namespace PrototypeAdal4.Controllers
             var product = await _context.Products.Include(p => p.Approvals)
                 .ThenInclude(a => a.Release)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(m =>m.ID == id);
+                .SingleOrDefaultAsync(m => m.ID == id);
             if (product == null)
             {
                 return NotFound();
@@ -56,13 +70,22 @@ namespace PrototypeAdal4.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,ProductName,ReleaseNotes,VersionNumber")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductName,ReleaseNotes,VersionNumber")] Product product)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(product);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (DbUpdateException /* e */)
+            {
+                ModelState.AddModelError("", "Unable to save changes. " +
+                                             "Please try again");
             }
             return View(product);
         }
@@ -86,52 +109,51 @@ namespace PrototypeAdal4.Controllers
         // POST: Products/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,ProductName,ReleaseNotes,VersionNumber")] Product product)
+        public async Task<IActionResult> EditPost(int? id)
         {
-            if (id != product.ID)
+            if (id != null)
             {
                 return NotFound();
             }
+            var productToUpdate = await _context.Products.SingleOrDefaultAsync(p => p.ID == id);
 
-            if (ModelState.IsValid)
+            if (
+                await
+                    TryUpdateModelAsync<Product>(productToUpdate, "", p => p.ProductName, p => p.VersionNumber,
+                        p => p.ReleaseNotes))
             {
                 try
                 {
-                    _context.Update(product);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", "Unable to save changes. " + "Please try again.");
                 }
-                return RedirectToAction("Index");
             }
-            return View(product);
+            return View(productToUpdate);
         }
 
         // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.SingleOrDefaultAsync(m => m.ID == id);
+            var product = await _context.Products.AsNoTracking().SingleOrDefaultAsync(m => m.ID == id);
             if (product == null)
             {
                 return NotFound();
             }
-
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewData["ErrorMessage"] = "Delete failed. Please try again.";
+            }
             return View(product);
         }
 
@@ -140,10 +162,22 @@ namespace PrototypeAdal4.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            var product = await _context.Products.AsNoTracking().SingleOrDefaultAsync(m => m.ID == id);
+            if (product == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            try
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (DbUpdateException /* ex */)
+            {
+                return RedirectToAction("Delete", new {id = id, saveChangesError = true});
+            }
         }
 
         private bool ProductExists(int id)
