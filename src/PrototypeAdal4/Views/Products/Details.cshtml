@@ -1,0 +1,62 @@
+@model PrototypeAdal4.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReleaseNotes)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReleaseNotes)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VersionNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.VersionNumber)
+        </dd>
+    </dl>
+    <dt>
+        @Html.DisplayNameFor(model => model.Approvals)
+    </dt>
+    <dd>
+        <table class="table">
+            <tr>
+                <th>Approval Status</th>
+                <th>Approved By</th>
+                <th>Product</th>
+            </tr>
+            @foreach (var item in Model.Approvals)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApprovalStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApprovedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product)
+                    </td>
+                </tr>
+            }
+        </table>
+    </dd>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
