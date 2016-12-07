@@ -6,7 +6,7 @@
 
 <table>
     <tr>
-        <th>Submission Date</th>
+        <th>Submission Date</th><td></td>
         <th>Products</th>
     </tr>
     @foreach (var item in Model)
@@ -15,6 +15,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.SubmissionDate)
             </td>
+            
             <td>
                 @item.ReleaseCount
             </td>
