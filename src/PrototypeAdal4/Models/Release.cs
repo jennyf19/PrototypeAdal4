@@ -11,9 +11,9 @@ namespace PrototypeAdal4.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ReleaseID { get; set; }
 
-        public DateTime SubmissionDateTime { get; set; }
+       public int ProductID { get; set; }
 
-        public int ProductID { get; set; }
+        public int ApprovalID { get; set; }
 
         //Navigation property
         public ICollection<Approval> Approvals { get; set; }

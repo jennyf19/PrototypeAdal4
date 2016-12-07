@@ -1,7 +1,23 @@
-﻿@{
-    ViewData["Title"] = "About";
+﻿@model IEnumerable<PrototypeAdal4.Models.ReleaseViewModels.ReleaseDateGroup>
+@{
+    ViewBag.Title = "Release Submission Statistics";
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
+<h2>Release Submission Statistics</h2>
 
-<p>Use this area to provide additional information.</p>
+<table>
+    <tr>
+        <th>Submission Date</th>
+        <th>Products</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubmissionDate)
+            </td>
+            <td>
+                @item.ReleaseCount
+            </td>
+        </tr>
+    }
+</table>

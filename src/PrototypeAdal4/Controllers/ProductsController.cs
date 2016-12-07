@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using PrototypeAdal4.Data;
 using PrototypeAdal4.Models;
 
+
 namespace PrototypeAdal4.Controllers
 {
     public class ProductsController : Controller
@@ -20,23 +21,47 @@ namespace PrototypeAdal4.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-           
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
             var products = from p in _context.Products
                 select p;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(p => p.ProductName.Contains(searchString));
+            }
             switch (sortOrder)
             {
                 case "name_desc":
                     products = products.OrderByDescending(p => p.ProductName);
+                    break;
+                case "Date":
+                    products = products.OrderBy(p => p.SubmissionDate);
+                    break;
+                case "date_desc":
+                    products = products.OrderByDescending(p => p.SubmissionDate);
                     break;
                 default:
                     products = products.OrderBy(p => p.ProductName);
                     break;
 
             }
-            return View(await products.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Product>.CreateAsync(products.AsNoTracking(), page?? 1, pageSize));
         }
 
         // GET: Products/Details/5

@@ -22,10 +22,10 @@ namespace PrototypeAdal4.Data
             var products = new Product[]
             {
 
-                new Product {ProductName = "Adal-v4", VersionNumber = "v1.11.11", ReleaseNotes = "Cats are cool"},
-                new Product {ProductName = "Azure-ActiveDirectory", VersionNumber = "v1.00.11", ReleaseNotes = "Cats are awesoeme"},
-                 new Product {ProductName = "Build-Android-Master", VersionNumber = "v1.11.01", ReleaseNotes = "Cats sleep all day"},
-                  new Product {ProductName = "Msal-Dotnet", VersionNumber = "v1.11.02", ReleaseNotes = "Cats are love trees"},
+                new Product {ProductName = "Adal-v4", VersionNumber = "v1.11.11", ReleaseNotes = "Cats are cool", SubmissionDate = DateTime.Parse("2016-12-03")},
+                new Product {ProductName = "Azure-ActiveDirectory", VersionNumber = "v1.00.11", ReleaseNotes = "Cats are awesoeme", SubmissionDate = DateTime.Parse("2015-01-03")},
+                 new Product {ProductName = "Build-Android-Master", VersionNumber = "v1.11.01", ReleaseNotes = "Cats sleep all day", SubmissionDate = DateTime.Parse("2012-02-03")},
+                  new Product {ProductName = "Msal-Dotnet", VersionNumber = "v1.11.02", ReleaseNotes = "Cats are love trees", SubmissionDate = DateTime.Parse("2010-03-03")},
 
             };
 
@@ -37,10 +37,10 @@ namespace PrototypeAdal4.Data
 
             var releases = new Release[]
             {
-                new Release {ProductID = 1, SubmissionDateTime = DateTime.Parse("2016-12-03")},
-                new Release {ProductID = 2, SubmissionDateTime = DateTime.Parse("2015-01-03")},
-                new Release {ProductID = 3, SubmissionDateTime = DateTime.Parse("2012-02-03")},
-                new Release {ProductID = 4, SubmissionDateTime = DateTime.Parse("2010-03-03")},
+                new Release {ProductID = 1},
+                new Release {ProductID = 2},
+                new Release {ProductID = 3},
+                new Release {ProductID = 4},
             };
             foreach (Release r in releases)
             {
