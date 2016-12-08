@@ -18,8 +18,6 @@ namespace PrototypeAdal4.Models
 
         //public int ProductID { get; set; }
 
-        public int ProductID { get; set; }
-
         [DisplayFormat(NullDisplayText = "No Status")]
         [Display(Name = "Approval Status")]
         public ApprovalStatus? ApprovalStatus { get; set; }
@@ -34,9 +32,7 @@ namespace PrototypeAdal4.Models
         [Display(Name = "Date Approved")]
         public DateTime ApprovedDate { get; set; }
 
-        public Product Product { get; set; }
-
-        public Release Release { get; set; }
+        public ICollection<Release> Releases { get; set; }
 
     }
 }

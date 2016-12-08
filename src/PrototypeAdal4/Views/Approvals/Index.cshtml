@@ -17,29 +17,26 @@
 </form>
 <table class="table">
     <thead>
-    <tr>
-        <th>
-           <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Product Name</a>
-        </th>
-        <th>
-            Approval Status
-        </th>
-        <th>
-            Approved By
-        </th>
-        <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Approved Date</a>
-        </th>
-        <th></th>
-    </tr>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Product Name</a>
+            </th>
+            <th>
+                Approval Status
+            </th>
+            <th>
+                Approved By
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Approved Date</a>
+            </th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Product.ProductName)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ApprovalStatus)
                 </td>

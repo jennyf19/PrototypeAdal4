@@ -73,7 +73,7 @@ namespace PrototypeAdal4.Controllers
             }
 
             var product = await _context.Products.Include(p => p.Approvals)
-                .ThenInclude(a => a.Release)
+                .ThenInclude(a => a.Releases)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(m => m.ID == id);
             if (product == null)

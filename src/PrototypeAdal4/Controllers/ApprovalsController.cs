@@ -41,12 +41,12 @@ namespace PrototypeAdal4.Controllers
                 select a;
             if (!String.IsNullOrEmpty(searchString))
             {
-                approvals = approvals.Where(a => a.Product.ProductName.Contains(searchString));
+                approvals = approvals.Where(a => a.ApprovedBy.Contains(searchString));
             }
             switch (sortOrder)
             {
                 case "name_desc":
-                    approvals = approvals.OrderByDescending(a => a.Product.ProductName);
+                    approvals = approvals.OrderByDescending(a => a.Releases);
                     break;
                 case "Date":
                     approvals = approvals.OrderBy(a => a.ApprovedDate);
@@ -55,7 +55,7 @@ namespace PrototypeAdal4.Controllers
                     approvals = approvals.OrderByDescending(a => a.ApprovedDate);
                     break;
                 default:
-                    approvals = approvals.OrderBy(a => a.Product.ProductName);
+                    approvals = approvals.OrderBy(a => a.Releases);
                     break;
             }
 
@@ -142,7 +142,7 @@ namespace PrototypeAdal4.Controllers
 
             var approvalToUpdate = await _context.Approvals.SingleOrDefaultAsync(a => a.ApprovalID == id);
 
-            if (await TryUpdateModelAsync<Approval>(approvalToUpdate, "", a => a.Product.ProductName, a => a.Product.VersionNumber, a => a.ApprovalStatus))
+            if (await TryUpdateModelAsync<Approval>(approvalToUpdate, "", a => a.Releases, a => a.ApprovedDate, a => a.ApprovalStatus))
             {
                 try
                 {

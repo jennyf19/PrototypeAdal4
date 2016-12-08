@@ -52,28 +52,28 @@ namespace PrototypeAdal4.Data
             {
                 new Approval
                 {
-                    ApprovalID = 1, ProductID = 1,
+                    ApprovalID = 1, 
                     ApprovalStatus = ApprovalStatus.Approved,
                     ApprovedBy = "Rich",
                     ApprovedDate = DateTime.Parse("2016-12-6")
                 },
                 new Approval
                 {
-                    ApprovalID = 2, ProductID =2,
+                    ApprovalID = 2, 
                     ApprovalStatus = ApprovalStatus.Approved,
                     ApprovedBy = "Ashima",
                     ApprovedDate = DateTime.Parse("2016-12-7")
                 },
                 new Approval
                 {
-                    ApprovalID = 3, ProductID = 3,
+                    ApprovalID = 3,
                     ApprovalStatus = ApprovalStatus.Approved,
                     ApprovedBy = "Rich",
                     ApprovedDate = DateTime.Parse("2016-11-6")
                 },
                 new Approval
                 {
-                    ApprovalID = 4, ProductID =4,
+                    ApprovalID = 4,
                     ApprovalStatus = ApprovalStatus.Approved,
                     ApprovedBy = "Ashima",
                     ApprovedDate = DateTime.Parse("2016-11-7")

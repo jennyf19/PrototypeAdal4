@@ -11,22 +11,10 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Product.ProductName)
+            @Html.DisplayNameFor(model => model.Releases)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Product.ProductName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Product.VersionNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Product.VersionNumber)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Product.SubmissionDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Product.SubmissionDate)
+            @Html.DisplayFor(model => model.Releases)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ApprovalStatus)
@@ -46,7 +34,7 @@
         <dd>
             @Html.DisplayFor(model => model.ApprovedDate)
         </dd>
-        <dt>@Html.DisplayNameFor(model => model.Release)</dt>
+        <dt>@Html.DisplayNameFor(model => model.Releases)</dt>
         <dd>
             <table class="table">
                 <tr>
@@ -58,20 +46,11 @@
                     <th>Approved By</th>
                     <th>Date Approved</th>
                 </tr>
-                @foreach (var item in Model)
+                @foreach (var item in Model.Releases)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(model => model.Product.ProductName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => model.Product.VersionNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => model.Product.ReleaseNotes)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => model.Product.SubmissionDate)
+                            @Html.DisplayFor(model => model.Releases)
                         </td>
                         <td>
                             @Html.DisplayFor(model => model.ApprovalStatus)
