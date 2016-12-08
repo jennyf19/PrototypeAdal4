@@ -14,7 +14,6 @@ namespace PrototypeAdal4.Models
 
     public class Approval
     {
-
         public int ApprovalID { get; set; }
 
         //public int ProductID { get; set; }

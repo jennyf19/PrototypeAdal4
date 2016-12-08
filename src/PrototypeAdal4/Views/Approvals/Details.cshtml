@@ -23,10 +23,10 @@
             @Html.DisplayFor(model => model.Product.VersionNumber)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model=> model.Product.SubmissionDate)
+            @Html.DisplayNameFor(model => model.Product.SubmissionDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model=> model.Product.SubmissionDate)
+            @Html.DisplayFor(model => model.Product.SubmissionDate)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ApprovalStatus)
@@ -45,6 +45,46 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ApprovedDate)
+        </dd>
+        <dt>@Html.DisplayNameFor(model => model.Release)</dt>
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Version Number</th>
+                    <th>Release Notes</th>
+                    <th>Submission Date</th>
+                    <th>Approval Status</th>
+                    <th>Approved By</th>
+                    <th>Date Approved</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => model.Product.ProductName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Product.VersionNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Product.ReleaseNotes)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Product.SubmissionDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ApprovalStatus)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ApprovedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ApprovedDate)
+                        </td>
+                    </tr>
+                }
+            </table>
         </dd>
     </dl>
 </div>

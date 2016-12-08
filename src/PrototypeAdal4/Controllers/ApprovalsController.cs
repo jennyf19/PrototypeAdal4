@@ -94,11 +94,20 @@ namespace PrototypeAdal4.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ApprovalID,ApprovalStatus,ApprovedBy,ApprovedDate")] Approval approval)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(approval);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(approval);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (DbUpdateException /* ex */)
+            {
+                ModelState.AddModelError("", "Unable to save changes. " +
+                                              "Please try again");
             }
             return View(approval);
         }
@@ -122,52 +131,55 @@ namespace PrototypeAdal4.Controllers
         // POST: Approvals/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ApprovalID,ApprovalStatus,ApprovedBy,ApprovedDate")] Approval approval)
+        public async Task<IActionResult> EditPost(int? id)
         {
-            if (id != approval.ApprovalID)
+            if (id != null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var approvalToUpdate = await _context.Approvals.SingleOrDefaultAsync(a => a.ApprovalID == id);
+
+            if (await TryUpdateModelAsync<Approval>(approvalToUpdate, "", a => a.Product.ProductName, a => a.Product.VersionNumber, a => a.ApprovalStatus))
             {
                 try
                 {
-                    _context.Update(approval);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ApprovalExists(approval.ApprovalID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", "Unable to save changes."+
+                        "Please try again.");
                 }
                 return RedirectToAction("Index");
             }
-            return View(approval);
+            return View(approvalToUpdate);
         }
 
         // GET: Approvals/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var approval = await _context.Approvals.SingleOrDefaultAsync(m => m.ApprovalID == id);
+            var approval = await _context.Approvals
+                .AsNoTracking()
+                .SingleOrDefaultAsync(m => m.ApprovalID == id);
+
             if (approval == null)
             {
                 return NotFound();
             }
 
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewData["ErrorMessage"] = "Delete failed. Please try again.";
+            }
             return View(approval);
         }
 
