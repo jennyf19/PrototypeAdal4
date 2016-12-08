@@ -14,18 +14,22 @@ namespace PrototypeAdal4.Models
 
         [Required]
         [StringLength(50, ErrorMessage = "Product Name cannot be longer than 50 characters")]
+        [Display(Name= "Product Name")]
         public string ProductName { get; set; }
 
         [Required]
         [RegularExpression(@"^v[1-9]{1,2}\.([0-9]{1,2}\.)([0-9]{1,3})$", ErrorMessage = "The version number must be in the following format: v0.00.00")]
+        [Display(Name = "Version Number")]
         public string VersionNumber { get; set; }
 
         [Required]
         [DataType(DataType.MultilineText)]
+        [Display(Name = "Release Notes")]
         public string ReleaseNotes { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Submission Date")]
         public DateTime SubmissionDate { get; set; }
 
         public ICollection<Release> Releases { get; set; }

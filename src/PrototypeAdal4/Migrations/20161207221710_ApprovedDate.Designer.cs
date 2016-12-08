@@ -8,9 +8,10 @@ using PrototypeAdal4.Data;
 namespace PrototypeAdal4.Migrations
 {
     [DbContext(typeof(PrototypeAdal4Context))]
-    partial class PrototypeAdal4ContextModelSnapshot : ModelSnapshot
+    [Migration("20161207221710_ApprovedDate")]
+    partial class ApprovedDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")

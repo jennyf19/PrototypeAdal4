@@ -1,0 +1,60 @@
+@model PaginatedList<PrototypeAdal4.Models.Approval>
+
+@{
+    ViewData["Title"] = "Approvals";
+}
+
+<h2>Approval Status</h2>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions" style="color:green">
+        <p>
+            Find approvals by product name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default btn" />
+            <a asp-action="Index">Back to List</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+           <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Product Name</a>
+        </th>
+        <th>
+            Approval Status
+        </th>
+        <th>
+            Approved By
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Approved Date</a>
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApprovalStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApprovedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApprovedDate)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ApprovalID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ApprovalID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ApprovalID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
