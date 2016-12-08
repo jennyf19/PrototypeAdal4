@@ -52,36 +52,42 @@ namespace PrototypeAdal4.Data
             {
                 new Approval
                 {
-                    ApprovalID = 1, 
+                    ApprovalID = 1, ProductID = products.Single(r => r.ProductName == "Adal-v4").ID,
                     ApprovalStatus = ApprovalStatus.Approved,
                     ApprovedBy = "Rich",
                     ApprovedDate = DateTime.Parse("2016-12-6")
                 },
                 new Approval
                 {
-                    ApprovalID = 2, 
+                    ApprovalID = 2, ProductID = products.Single(r => r.ProductName == "Azure-ActiveDirectory").ID,
                     ApprovalStatus = ApprovalStatus.Approved,
                     ApprovedBy = "Ashima",
                     ApprovedDate = DateTime.Parse("2016-12-7")
                 },
                 new Approval
                 {
-                    ApprovalID = 3,
+                    ApprovalID = 3, ProductID = products.Single(r => r.ProductName == "Build-Android-Master").ID,
                     ApprovalStatus = ApprovalStatus.Approved,
                     ApprovedBy = "Rich",
                     ApprovedDate = DateTime.Parse("2016-11-6")
                 },
                 new Approval
                 {
-                    ApprovalID = 4,
+                    ApprovalID = 4, ProductID = products.Single(r => r.ProductName == "Msal-Dotnet").ID,
                     ApprovalStatus = ApprovalStatus.Approved,
                     ApprovedBy = "Ashima",
                     ApprovedDate = DateTime.Parse("2016-11-7")
                 }
             };
-            foreach (Approval a in approvals)
+            foreach (Release e in releases)
             {
-                context.Approvals.Add(a);
+                var releaseInDataBase = context.Releases.Where(
+                    re => re.Product.ID == e.ProductID &&
+                          re.Approval.ApprovalID == e.ApprovalID).SingleOrDefault();
+                if (releaseInDataBase == null)
+                {
+                    context.Releases.Add(e);
+                }
             }
             context.SaveChanges();
         }

@@ -15,5 +15,6 @@ namespace PrototypeAdal4.Models.ReleaseViewModels
         public DateTime? ApprovedDateTime { get; set; }
 
         public int ReleaseCount { get; set; }
+
     }
 }

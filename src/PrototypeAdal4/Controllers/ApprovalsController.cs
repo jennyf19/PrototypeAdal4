@@ -46,7 +46,7 @@ namespace PrototypeAdal4.Controllers
             switch (sortOrder)
             {
                 case "name_desc":
-                    approvals = approvals.OrderByDescending(a => a.Releases);
+                    approvals = approvals.OrderByDescending(a => a.ApprovalStatus);
                     break;
                 case "Date":
                     approvals = approvals.OrderBy(a => a.ApprovedDate);
@@ -55,7 +55,7 @@ namespace PrototypeAdal4.Controllers
                     approvals = approvals.OrderByDescending(a => a.ApprovedDate);
                     break;
                 default:
-                    approvals = approvals.OrderBy(a => a.Releases);
+                    approvals = approvals.OrderBy(a => a.ApprovalStatus);
                     break;
             }
 
@@ -72,7 +72,9 @@ namespace PrototypeAdal4.Controllers
                 return NotFound();
             }
 
-            var approval = await _context.Approvals.SingleOrDefaultAsync(m => m.ApprovalID == id);
+            var approval = await _context.Approvals.Include(a => a.ApprovalStatus)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(m => m.ApprovalID == id);
             if (approval == null)
             {
                 return NotFound();
@@ -142,7 +144,7 @@ namespace PrototypeAdal4.Controllers
 
             var approvalToUpdate = await _context.Approvals.SingleOrDefaultAsync(a => a.ApprovalID == id);
 
-            if (await TryUpdateModelAsync<Approval>(approvalToUpdate, "", a => a.Releases, a => a.ApprovedDate, a => a.ApprovalStatus))
+            if (await TryUpdateModelAsync<Approval>(approvalToUpdate, "", a => a.ApprovedDate, a => a.ApprovalStatus, a => a.ApprovedBy))
             {
                 try
                 {
@@ -188,10 +190,22 @@ namespace PrototypeAdal4.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var approval = await _context.Approvals.SingleOrDefaultAsync(m => m.ApprovalID == id);
-            _context.Approvals.Remove(approval);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            var approval = await _context.Approvals.AsNoTracking().SingleOrDefaultAsync(m => m.ApprovalID == id);
+            if (approval == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            try
+            {
+                _context.Approvals.Remove(approval);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (DbUpdateException /* ex */)
+            {
+                return RedirectToAction("Delete", new { id = id, saveChangesError = true });
+            }
         }
 
         private bool ApprovalExists(int id)

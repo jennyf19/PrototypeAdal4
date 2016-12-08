@@ -16,7 +16,7 @@ namespace PrototypeAdal4.Models
     {
         public int ApprovalID { get; set; }
 
-        //public int ProductID { get; set; }
+        public int ProductID { get; set; }
 
         [DisplayFormat(NullDisplayText = "No Status")]
         [Display(Name = "Approval Status")]

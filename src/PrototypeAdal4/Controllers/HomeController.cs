@@ -22,13 +22,13 @@ namespace PrototypeAdal4.Controllers
         public async Task<ActionResult> About()
         {
             IQueryable<ReleaseDateGroup> data = from product in _context.Products
-                group product by product.SubmissionDate
+                                                group product by product.SubmissionDate
                 into dateGroup
-                select new ReleaseDateGroup()
-                {
-                    SubmissionDate = dateGroup.Key,
-                    ReleaseCount = dateGroup.Count()
-                };
+                                                select new ReleaseDateGroup()
+                                                {
+                                                    SubmissionDate = dateGroup.Key,
+                                                    ReleaseCount = dateGroup.Count()
+                                                };
             return View(await data.AsNoTracking().ToListAsync());
         }
 
@@ -36,7 +36,7 @@ namespace PrototypeAdal4.Controllers
         {
             return View();
         }
-     
+
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
